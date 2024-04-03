@@ -37,7 +37,7 @@ mch.onBroadcast((data) => {
 
 Note: You need to implement a signaling server by yourself, you need broadcast the room users to new user when they join the room. The data structure should be like this:
 
-```json
+```jsonc
 {
   "event": "open",
   // The room users ids
