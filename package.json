@@ -1,0 +1,62 @@
+{
+  "name": "mche",
+  "type": "module",
+  "version": "0.1.10",
+  "packageManager": "pnpm@8.15.5",
+  "description": "Message Channel Helpers",
+  "author": "alexzhang1030",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexzhang1030/mche.git"
+  },
+  "keywords": [
+    "webrtc",
+    "helpers",
+    "peer",
+    "message channel"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "lint": "eslint .",
+    "prepare": "simple-git-hooks",
+    "build": "tsup",
+    "prepublishOnly": "pnpm run build",
+    "release": "vitest run && bumpp --commit \"chore: release v%s\" --push --tag && pnpm publish"
+  },
+  "dependencies": {
+    "wshe": "^0.1.2"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.11.6",
+    "bumpp": "^9.4.0",
+    "eslint": "npm:eslint-ts-patch@8.56.0-0",
+    "eslint-ts-patch": "8.56.0-0",
+    "lint-staged": "^15.2.2",
+    "nanoid": "^5.0.6",
+    "simple-git-hooks": "^2.11.1",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*": [
+      "eslint --fix"
+    ]
+  }
+}
