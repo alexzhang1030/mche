@@ -6,7 +6,7 @@
 <a href="https://www.npmjs.com/package/mche" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/npm/dt/mche" alt="NPM Downloads" /></a>
 <a href="https://github.com/alexzhang1030/mche/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><img src="https://badgen.net/github/license/alexzhang1030/mche" alt="License" /></a>
 
-This is a library that provides some utilities helpers you to connection between different devices.
+This is a library that provides some utilities that helps you to communicate data between different devices(in browser).
 
 It's simple if you want to build a collaboration application by using `mche`.
 
