@@ -93,7 +93,7 @@ export class MCHelper {
   #getConnection() {
     return new MCHEConnection((message) => {
       this.#addMessageToBuffer(message)
-    }, this.#options.debug!)
+    }, this.#options.debug!, this.#options.iceServers)
   }
 
   async #bindEvents() {
