@@ -34,9 +34,12 @@ export class MCHEConnection {
   }
 
   async createOffer() {
-    this.#datachannel = this.#peerConnection.createDataChannel('datachannel')
+    const channel = this.#datachannel = this.#peerConnection.createDataChannel('datachannel')
     if (this.#debug)
       log('LocalDataChannel created.', this.#datachannel)
+    this.#datachannelCallbacks.forEach((callback) => {
+      callback(channel)
+    })
     const offer = await this.#peerConnection.createOffer()
     await this.#peerConnection.setLocalDescription(offer)
     return offer

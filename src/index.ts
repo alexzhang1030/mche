@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid/non-secure'
+import type { NonRoomId, PayloadAnswer, PayloadCandidate, PayloadOffer } from './signalling'
 import { MCHEConnection } from './connection'
-import type { PayloadAnswer, PayloadCandidate, PayloadOffer } from './signalling'
 import { SignallingServerClient, Topic } from './signalling'
 import { error, log } from './utils'
 
@@ -30,6 +30,12 @@ export interface MCHelperOptions {
    * ]
    */
   iceServers?: RTCIceServer[]
+  /**
+   * Room id.
+   *
+   * Same room id will be able to communicate with each other.
+   */
+  roomId: string
 }
 
 const randomId = () => nanoid(6)
@@ -54,9 +60,9 @@ export class MCHelper {
   constructor(options: MCHelperOptions) {
     this.#options = options
     this.#id = options.id || randomId()
-    this.#signallingServer = new SignallingServerClient(options.signallingServerUrl)
+    this.#signallingServer = new SignallingServerClient(options.signallingServerUrl, options.roomId)
     this.#bindEvents().catch(error)
-    this.#signallingServer.on('open', (ids) => {
+    this.#signallingServer.on('open', ({ ids }) => {
       ids.forEach((id) => {
         this.registerRemote(id)
       })
@@ -95,7 +101,7 @@ export class MCHelper {
       await connection.receiveOffer(offer)
       const answer = await connection.createAnswer()
 
-      const payload: PayloadAnswer = {
+      const payload: NonRoomId<PayloadAnswer> = {
         answer,
         // swap sender and receiver
         receiver: sender,
@@ -148,7 +154,7 @@ export class MCHelper {
     const connection = this.#getConnection()
     connection.onCandidate((candidate) => {
       // send candidate
-      const payload: PayloadCandidate = {
+      const payload: NonRoomId<PayloadCandidate> = {
         receiver: nonNullRemoteId,
         sender: this.#id,
         candidate,
@@ -171,7 +177,7 @@ export class MCHelper {
     }
     const offer = await connection.createOffer()
 
-    const payload: PayloadOffer = {
+    const payload: NonRoomId<PayloadOffer> = {
       offer,
       sender: this.#id,
       receiver: peerId,

@@ -3,6 +3,7 @@ import { createWSHE } from 'wshe'
 export interface PayloadCommon {
   sender: string
   receiver: string
+  roomId: string
 }
 
 export interface PayloadOffer extends PayloadCommon {
@@ -27,25 +28,42 @@ interface Payload {
   [Topic.OfferSend]: PayloadOffer
   [Topic.AnswerSend]: PayloadAnswer
   [Topic.CandidateSend]: PayloadCandidate
-  join: string
-  open: string[]
+  join: {
+    roomId: string
+    id: string
+  }
+  open: {
+    roomId: string
+    ids: string[]
+  }
 }
 
-export class SignallingServerClient {
-  #ws: ReturnType<typeof createWSHE>
+export type NonRoomId<T> = Omit<T, 'roomId'>
 
-  constructor(url: string) {
+export class SignallingServerClient {
+  #ws
+  #roomId
+
+  constructor(url: string, roomId: string) {
     this.#ws = createWSHE(url, {
       immediate: true,
     })
+    this.#roomId = roomId
   }
 
-  send<K extends keyof Payload = keyof Payload>(topic: K, data: Payload[K]) {
-    this.#ws.send(topic, data)
+  send<K extends keyof Payload = keyof Payload>(topic: K, data: NonRoomId<Payload[K]>) {
+    this.#ws.send(topic, {
+      ...data,
+      roomId: this.#roomId,
+    })
   }
 
   on<K extends keyof Payload = keyof Payload>(topic: K, callback: (data: Payload[K]) => void) {
-    this.#ws.subscribe(topic, callback)
+    this.#ws.subscribe(topic, (data: Payload[K]) => {
+      if (data.roomId !== this.#roomId)
+        return
+      callback(data)
+    })
   }
 
   close() {

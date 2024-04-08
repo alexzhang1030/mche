@@ -25,7 +25,8 @@ import { MCHelper } from 'mche'
 
 const mch = new MCHelper({
   signalingServer: 'ws://localhost:8080',
-  id: 'alice',
+  id: '<uniqueSelfId>',
+  roomId: '<uniqueRoomId>',
 })
 
 mch.broadcast('hello')
@@ -41,7 +42,10 @@ Note: You need to implement a signaling server by yourself, you need broadcast t
 {
   "event": "open",
   // The room users ids
-  "data": ["foo", "bar"]
+  "data": {
+    "roomId": "<roomId>",
+    "ids": ["<id1>", "<id2>"]
+  }
 }
 ```
 
