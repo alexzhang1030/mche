@@ -40,8 +40,6 @@ export interface MCHelperOptions {
 
 const randomId = () => nanoid(6)
 
-// TODO: fix broadcast issue
-
 export class MCHelper {
   #options
   #id
