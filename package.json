@@ -37,6 +37,7 @@
     "release": "vitest run && bumpp --commit \"chore: release v%s\" --push --tag && pnpm publish"
   },
   "dependencies": {
+    "nanoid": "^5.0.7",
     "wshe": "^0.1.2"
   },
   "devDependencies": {
@@ -45,7 +46,6 @@
     "eslint": "npm:eslint-ts-patch@8.56.0-0",
     "eslint-ts-patch": "8.56.0-0",
     "lint-staged": "^15.2.2",
-    "nanoid": "^5.0.7",
     "simple-git-hooks": "^2.11.1",
     "tsup": "^8.0.2",
     "typescript": "^5.4.4",
