@@ -40,7 +40,7 @@ interface Payload {
 
 export type NonRoomId<T> = Omit<T, 'roomId'>
 
-export class SignallingServerClient {
+export class SignalingServerClient {
   #ws
   #roomId
 

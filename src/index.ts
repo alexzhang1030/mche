@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid/non-secure'
-import type { NonRoomId, PayloadAnswer, PayloadCandidate, PayloadOffer } from './signalling'
+import type { NonRoomId, PayloadAnswer, PayloadCandidate, PayloadOffer } from './signaling'
 import { MCHEConnection } from './connection'
-import { SignallingServerClient, Topic } from './signalling'
+import { SignalingServerClient, Topic } from './signaling'
 import { error, log } from './utils'
 
 export interface MCHelperOptions {
@@ -60,7 +60,7 @@ export class MCHelper {
   constructor(options: MCHelperOptions) {
     this.#options = options
     this.#id = options.id || randomId()
-    this.#signallingServer = new SignallingServerClient(options.signallingServerUrl, options.roomId)
+    this.#signallingServer = new SignalingServerClient(options.signallingServerUrl, options.roomId)
     this.#bindEvents().catch(error)
     this.#signallingServer.on('open', ({ ids }) => {
       ids.forEach((id) => {
