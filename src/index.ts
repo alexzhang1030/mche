@@ -6,10 +6,10 @@ import { error, log } from './utils'
 
 export interface MCHelperOptions {
   /**
-   * The URL of the signalling server.
+   * The URL of the signaling server.
    * @example "wss://example.com:8080"
    */
-  signallingServerUrl: string
+  signalingServerUrl: string
   /**
    * The ID of the peer.
    * If not set, will be generated using `nanoid(6)`.
@@ -58,7 +58,7 @@ export class MCHelper {
   constructor(options: MCHelperOptions) {
     this.#options = options
     this.#id = options.id || randomId()
-    this.#signallingServer = new SignalingServerClient(options.signallingServerUrl, options.roomId)
+    this.#signallingServer = new SignalingServerClient(options.signalingServerUrl, options.roomId)
     this.#bindEvents().catch(error)
     this.#bindSignalingEvents()
   }
