@@ -1,9 +1,12 @@
 import { createWSHE } from 'wshe'
 
-export interface PayloadCommon {
+export interface RoomId {
+  roomId: string
+}
+
+export interface PayloadCommon extends RoomId {
   sender: string
   receiver: string
-  roomId: string
 }
 
 export interface PayloadOffer extends PayloadCommon {
@@ -28,14 +31,12 @@ interface Payload {
   [Topic.OfferSend]: PayloadOffer
   [Topic.AnswerSend]: PayloadAnswer
   [Topic.CandidateSend]: PayloadCandidate
-  join: {
-    roomId: string
-    id: string
-  }
   open: {
-    roomId: string
     ids: string[]
-  }
+  } & RoomId
+  close: {
+    id: string
+  } & RoomId
 }
 
 export type NonRoomId<T> = Omit<T, 'roomId'>

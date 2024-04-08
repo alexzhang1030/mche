@@ -60,10 +60,25 @@ export class MCHelper {
     this.#id = options.id || randomId()
     this.#signallingServer = new SignalingServerClient(options.signallingServerUrl, options.roomId)
     this.#bindEvents().catch(error)
+    this.#bindSignalingEvents()
+  }
+
+  #bindSignalingEvents() {
     this.#signallingServer.on('open', ({ ids }) => {
+      if (this.#options.debug)
+        log('Open connection with', ids)
       ids.forEach((id) => {
-        this.registerRemote(id)
+        this.#registerRemote(id)
       })
+    })
+    this.#signallingServer.on('close', ({ id }) => {
+      const connection = this.#connectionPool.get(id)
+      if (connection) {
+        if (this.#options.debug)
+          log('Close connection with', id)
+        connection.close()
+        this.#connectionPool.delete(id)
+      }
     })
   }
 
@@ -142,10 +157,10 @@ export class MCHelper {
   }
 
   /**
-   * You should call this function to connection other peers.
+   * Call this function to connection other peers.
    * @returns The ID of the peer. You need **hold** this ID to do next operations.
    */
-  async registerRemote(remoteId?: string) {
+  async #registerRemote(remoteId?: string) {
     const nonNullRemoteId = remoteId || randomId()
 
     // init peer connection
@@ -184,6 +199,11 @@ export class MCHelper {
       log('Sending offer to', peerId, 'payload is', payload)
 
     this.#signallingServer.send(Topic.OfferSend, payload)
+  }
+
+  // ----------------- Public API -----------------
+  get id() {
+    return this.#id
   }
 
   broadcast<T>(message: T) {

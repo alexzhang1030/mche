@@ -34,17 +34,43 @@ mch.broadcast('hello')
 mch.onBroadcast((data) => {
   console.log(data)
 })
+
+// Call close if someone is leaving the room
+mch.close()
 ```
 
-Note: You need to implement a signaling server by yourself, you need broadcast the room users to new user when they join the room. The data structure should be like this:
+### Signaling Server
+
+Note: You need to implement a signaling server by yourself.
+
+#### Broadcast Join
+
+You need broadcast the room users to new user when they join the room. The data structure should be like this:
 
 ```jsonc
 {
   "event": "open",
-  // The room users ids
+  // The peer users ids
   "data": {
     "roomId": "<roomId>",
     "ids": ["<id1>", "<id2>"]
+  }
+}
+```
+
+We actually connect other peers by using `WebRTC` after we get the `open` event. So `ids` should be required for connecting.
+
+#### Broadcast Leave
+
+You need broadcast the room users when someone leave the room. The data structure should be like this:
+
+```jsonc
+{
+  "event": "close",
+  // The leaved user id
+  "data": {
+    "roomId": "<roomId>",
+    "id": "<id>"
   }
 }
 ```
