@@ -7,16 +7,20 @@ const ICE_SERVERS: RTCIceServer[] = [
 ]
 
 export class MCHEConnection {
-  #peerConnection = new RTCPeerConnection({
-    iceServers: ICE_SERVERS,
-  })
+  #peerConnection
 
   #datachannel: RTCDataChannel | null = null
   #datachannelCallbacks: ((channel: RTCDataChannel) => void)[] = []
 
   #debug
 
-  constructor(onDataChannelMessage: (message: MessageEvent) => void, debug: boolean) {
+  constructor(onDataChannelMessage: (message: MessageEvent) => void, debug: boolean, customIceServers?: RTCIceServer[]) {
+    this.#peerConnection = new RTCPeerConnection({
+      iceServers: [
+        ...customIceServers ?? [],
+        ...ICE_SERVERS,
+      ],
+    })
     this.#peerConnection.ondatachannel = (event) => {
       const channel = this.#datachannel = event.channel
       if (this.#debug)
