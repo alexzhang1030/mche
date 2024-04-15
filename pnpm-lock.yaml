@@ -9,8 +9,8 @@ dependencies:
     specifier: ^5.0.7
     version: 5.0.7
   wshe:
-    specifier: ^0.1.2
-    version: 0.1.2
+    specifier: ^1.0.1
+    version: 1.0.1
 
 devDependencies:
   '@antfu/eslint-config':
@@ -1546,13 +1546,8 @@ packages:
     resolution: {integrity: sha512-mEQCMmwJu317oSz8CwdIOdwf3xMif1ttiM8LTufzc3g6kR+9Pe236twL8j3IYT1F7GfRgGcW6MWxzZjLIkuHIg==}
     dev: true
 
-  /destr@2.0.1:
-    resolution: {integrity: sha512-M1Ob1zPSIvlARiJUkKqvAZ3VAqQY6Jcuth/pBKQ2b1dX/Qx0OnJ8Vux6J2H5PTMQeRzWrrbTu70VxBfv/OPDJA==}
-    dev: true
-
   /destr@2.0.3:
     resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==}
-    dev: false
 
   /diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
@@ -3178,7 +3173,7 @@ packages:
     resolution: {integrity: sha512-lNeOl38Ws0eNxpO3+wD1I9rkHGQyj1NU1jlzv4go2CtEnEQEUfqnIvZG7W+bC/aXdJ27n5x/yUjb6RoT9tko+Q==}
     dependencies:
       defu: 6.1.4
-      destr: 2.0.1
+      destr: 2.0.3
       flat: 5.0.2
     dev: true
 
@@ -3915,8 +3910,8 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
-  /wshe@0.1.2:
-    resolution: {integrity: sha512-1hDrGc/u+j8xihNQNcs56BtLU5YoqswySVJjstyyPkUYXxg2cub2hVKGwQOlX11E8da9Cir++SVEEjr0it/uig==}
+  /wshe@1.0.1:
+    resolution: {integrity: sha512-i0ch+1JRYSx2JcVvaO1eadV7bj3eFXb8PfwnLRvLGTjN4rsnnp2JpiJAjN2oEeVCf4XsSsascnO/sTsrUPiIuw==}
     dependencies:
       destr: 2.0.3
       mitt: 3.0.1
