@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid/non-secure'
-import type { NonRoomId, PayloadAnswer, PayloadCandidate, PayloadOffer } from './signaling'
+import type { NonRoomId, Payload, PayloadAnswer, PayloadCandidate, PayloadOffer } from './signaling'
 import { MCHEConnection } from './connection'
 import { SignalingServerClient, Topic } from './signaling'
 import { error, log } from './utils'
@@ -40,6 +40,9 @@ export interface MCHelperOptions {
 
 const randomId = () => nanoid(6)
 
+export type OnJoinCallback = (data: Payload['open']['data']) => void
+export type OnLeaveCallback = (data: Payload['close']['data']) => void
+
 export class MCHelper {
   #options
   #id
@@ -54,6 +57,8 @@ export class MCHelper {
 
   #dataBuffer: MessageEvent[] = []
   #dataBufferCallbacks: ((message: MessageEvent) => void)[] = []
+  #onJoinCallbacks: OnJoinCallback[] = []
+  #onLeaveCallbacks: OnLeaveCallback[] = []
 
   constructor(options: MCHelperOptions) {
     this.#options = options
@@ -64,20 +69,27 @@ export class MCHelper {
   }
 
   #bindSignalingEvents() {
-    this.#signallingServer.on('open', ({ ids }) => {
+    this.#signallingServer.on('open', ({ data }) => {
       if (this.#options.debug)
-        log('Open connection with', ids)
-      ids.forEach((id) => {
+        log('Open connection with', data)
+      data.forEach(({ id }) => {
         this.#registerRemote(id)
       })
+      this.#onJoinCallbacks.forEach((callback) => {
+        callback(data)
+      })
     })
-    this.#signallingServer.on('close', ({ id }) => {
+    this.#signallingServer.on('close', ({ data }) => {
+      const { id } = data
       const connection = this.#connectionPool.get(id)
       if (connection) {
         if (this.#options.debug)
           log('Close connection with', id)
         connection.close()
         this.#connectionPool.delete(id)
+        this.#onLeaveCallbacks.forEach((callback) => {
+          callback(data)
+        })
       }
     })
   }
@@ -223,6 +235,14 @@ export class MCHelper {
     })
   }
 
+  onJoin(callback: OnJoinCallback) {
+    this.#onJoinCallbacks.push(callback)
+  }
+
+  onLeave(callback: OnLeaveCallback) {
+    this.#onLeaveCallbacks.push(callback)
+  }
+
   /**
    * @returns cleanup fn
    */
@@ -243,5 +263,7 @@ export class MCHelper {
       connection.close()
     })
     this.#signallingServer.close()
+    this.#onJoinCallbacks.length = 0
+    this.#onLeaveCallbacks.length = 0
   }
 }

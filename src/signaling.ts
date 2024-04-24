@@ -27,15 +27,15 @@ export enum Topic {
   CandidateSend = 'mche:candidate:send',
 }
 
-interface Payload {
+export interface Payload {
   [Topic.OfferSend]: PayloadOffer
   [Topic.AnswerSend]: PayloadAnswer
   [Topic.CandidateSend]: PayloadCandidate
   open: {
-    ids: string[]
+    data: { id: string, userData?: Record<string, unknown> }[]
   } & RoomId
   close: {
-    id: string
+    data: { id: string }
   } & RoomId
 }
 

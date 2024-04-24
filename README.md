@@ -12,6 +12,8 @@ It's simple if you want to build a collaboration application by using `mche`.
 
 We provide first-class support to `WebRTC`.
 
+> ⚠️ WARNING: this project is not stable yet, please use it carefully. Expect breaking changes.
+
 ## Installation
 
 ```bash
@@ -53,7 +55,10 @@ You need broadcast the room users to new user when they join the room. The data 
   // The peer users ids
   "data": {
     "roomId": "<roomId>",
-    "ids": ["<id1>", "<id2>"]
+    "data": [
+      { "id": "<id1>", "userData": { } },
+      { "id": "<id2>", "userData": { } }
+    ]
   }
 }
 ```
@@ -70,7 +75,7 @@ You need broadcast the room users when someone leave the room. The data structur
   // The leaved user id
   "data": {
     "roomId": "<roomId>",
-    "id": "<id>"
+    "data": { "id": "<id>" }
   }
 }
 ```
