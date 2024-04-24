@@ -29,15 +29,15 @@ export class MCHEConnection {
       this.#datachannelCallbacks.forEach((callback) => {
         callback(channel)
       })
-      channel.addEventListener('open', () => {
-        this.#datachannelReadyCallbacks.forEach((callback) => {
-          callback(channel)
-        })
-      })
     }
     this.#datachannelCallbacks.push((channel) => {
       channel.onmessage = (event) => {
         onDataChannelMessage(event)
+      }
+      channel.onopen = () => {
+        this.#datachannelReadyCallbacks.forEach((callback) => {
+          callback(channel)
+        })
       }
     })
     this.#debug = debug
@@ -49,11 +49,6 @@ export class MCHEConnection {
       log('LocalDataChannel created.', this.#datachannel)
     this.#datachannelCallbacks.forEach((callback) => {
       callback(channel)
-    })
-    channel.addEventListener('open', () => {
-      this.#datachannelReadyCallbacks.forEach((callback) => {
-        callback(channel)
-      })
     })
     const offer = await this.#peerConnection.createOffer()
     await this.#peerConnection.setLocalDescription(offer)
