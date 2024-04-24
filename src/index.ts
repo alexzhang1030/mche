@@ -43,7 +43,7 @@ const randomId = () => nanoid(6)
 export type OnJoinCallback = (data: Payload['open']['data']) => void
 export type OnLeaveCallback = (data: Payload['close']['data']) => void
 
-export class MCHelper {
+export class MCHelper<B> {
   #options
   #id
   #connectionPool = new Map<
@@ -218,7 +218,7 @@ export class MCHelper {
     return this.#id
   }
 
-  broadcast<T>(message: T) {
+  broadcast(message: B) {
     const payload = {
       sender: this.#id,
       receiver: 'broadcast',
@@ -246,7 +246,7 @@ export class MCHelper {
   /**
    * @returns cleanup fn
    */
-  onBroadcast<T>(callback: (message: MessageEvent<T>) => void) {
+  onBroadcast(callback: (message: MessageEvent<B>) => void) {
     const fn = (message: MessageEvent) => {
       callback(message)
     }
