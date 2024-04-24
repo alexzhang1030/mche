@@ -39,6 +39,9 @@ export class MCHEConnection {
           callback(channel)
         })
       }
+      channel.onerror = (event) => {
+        log('DataChannel error.', event)
+      }
     })
     this.#debug = debug
   }
