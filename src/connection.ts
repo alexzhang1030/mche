@@ -80,7 +80,7 @@ export class MCHEConnection {
   }
 
   addDataChannelCallback(callback: (channel: RTCDataChannel) => void) {
-    if (this.#datachannel) {
+    if (this.#datachannel?.readyState === 'connecting') {
       callback(this.#datachannel)
       return
     }
