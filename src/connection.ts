@@ -11,6 +11,7 @@ export class MCHEConnection {
 
   #datachannel: RTCDataChannel | null = null
   #datachannelCallbacks: ((channel: RTCDataChannel) => void)[] = []
+  #datachannelReadyCallbacks: ((channel: RTCDataChannel) => void)[] = []
 
   #debug
 
@@ -28,6 +29,11 @@ export class MCHEConnection {
       this.#datachannelCallbacks.forEach((callback) => {
         callback(channel)
       })
+      channel.addEventListener('open', () => {
+        this.#datachannelReadyCallbacks.forEach((callback) => {
+          callback(channel)
+        })
+      })
     }
     this.#datachannelCallbacks.push((channel) => {
       channel.onmessage = (event) => {
@@ -43,6 +49,11 @@ export class MCHEConnection {
       log('LocalDataChannel created.', this.#datachannel)
     this.#datachannelCallbacks.forEach((callback) => {
       callback(channel)
+    })
+    channel.addEventListener('open', () => {
+      this.#datachannelReadyCallbacks.forEach((callback) => {
+        callback(channel)
+      })
     })
     const offer = await this.#peerConnection.createOffer()
     await this.#peerConnection.setLocalDescription(offer)
@@ -80,11 +91,19 @@ export class MCHEConnection {
   }
 
   addDataChannelCallback(callback: (channel: RTCDataChannel) => void) {
-    if (this.#datachannel?.readyState === 'connecting') {
+    if (this.#datachannel) {
       callback(this.#datachannel)
       return
     }
     this.#datachannelCallbacks.push(callback)
+  }
+
+  addDataChannelReadyCallback(callback: (channel: RTCDataChannel) => void) {
+    if (this.#datachannel?.readyState === 'open') {
+      callback(this.#datachannel)
+      return
+    }
+    this.#datachannelReadyCallbacks.push(callback)
   }
 
   close() {
