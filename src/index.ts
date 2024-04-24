@@ -235,6 +235,12 @@ export class MCHelper<B> {
     })
   }
 
+  onDataChannelCreated(callback: (channel: RTCDataChannel) => void) {
+    this.#connectionPool.forEach((connection) => {
+      connection.addDataChannelCallback(callback)
+    })
+  }
+
   onJoin(callback: OnJoinCallback) {
     this.#onJoinCallbacks.push(callback)
   }
