@@ -1,4 +1,5 @@
 import { log } from './utils'
+import type { MCHelperOptions } from '.'
 
 const ICE_SERVERS: RTCIceServer[] = [
   {
@@ -15,7 +16,7 @@ export class MCHEConnection {
 
   #debug
 
-  constructor(onDataChannelMessage: (message: MessageEvent) => void, debug: boolean, customIceServers?: RTCIceServer[]) {
+  constructor(onDataChannelMessage: (message: MessageEvent) => void, debug: MCHelperOptions['debug'], customIceServers?: RTCIceServer[]) {
     this.#peerConnection = new RTCPeerConnection({
       iceServers: [
         ...customIceServers ?? [],

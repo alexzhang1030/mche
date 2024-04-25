@@ -18,9 +18,12 @@ export interface MCHelperOptions {
   id?: string
   /**
    * Whether to print debug information.
+   * - `'verbose'`: print all debug information
+   * - `true`: print connection information
+   *
    * @default false
    */
-  debug?: boolean
+  debug?: boolean | 'verbose'
 
   /**
    * ICE servers.
@@ -197,7 +200,7 @@ export class MCHelper<B> {
         log('Sending candidate to', nonNullRemoteId, 'payload is', payload)
       this.#signallingServer.send(Topic.CandidateSend, payload)
     })
-    this.#connectionPool.set(nonNullRemoteId, connection)
+    this.#addNewConnection(nonNullRemoteId, connection)
     await this.#connect(nonNullRemoteId)
 
     return nonNullRemoteId
@@ -234,7 +237,7 @@ export class MCHelper<B> {
       message,
     }
 
-    if (this.#options.debug)
+    if (this.#options.debug === 'verbose')
       log('Broadcasting message', message, 'payload is', payload)
 
     this.#connectionPool.forEach((connection) => {
