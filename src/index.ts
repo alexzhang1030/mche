@@ -60,6 +60,8 @@ export class MCHelper<B> {
   #onJoinCallbacks: OnJoinCallback[] = []
   #onLeaveCallbacks: OnLeaveCallback[] = []
 
+  #onMessageChannelReadyCallbacks: ((channel: RTCDataChannel) => void)[] = []
+
   constructor(options: MCHelperOptions) {
     this.#options = options
     this.#id = options.id || randomId()
@@ -108,6 +110,13 @@ export class MCHelper<B> {
     }, this.#options.debug!, this.#options.iceServers)
   }
 
+  #addNewConnection(id: string, conn: MCHEConnection) {
+    this.#connectionPool.set(id, conn)
+    this.#onMessageChannelReadyCallbacks.forEach((callback) => {
+      conn.addDataChannelCallback(callback)
+    })
+  }
+
   async #bindEvents() {
     // Receive offer, send answer, receive answer
     // Receive candidate
@@ -120,7 +129,7 @@ export class MCHelper<B> {
       let connection = this.#connectionPool.get(sender)
       if (!connection) {
         connection = this.#getConnection()
-        this.#connectionPool.set(sender, connection)
+        this.#addNewConnection(sender, connection)
       }
 
       await connection.receiveOffer(offer)
@@ -235,10 +244,8 @@ export class MCHelper<B> {
     })
   }
 
-  onDataChannelReady(callback: (channel: RTCDataChannel) => void) {
-    this.#connectionPool.forEach((connection) => {
-      connection.addDataChannelReadyCallback(callback)
-    })
+  onMessageChannelReady(callback: (channel: RTCDataChannel) => void) {
+    this.#onMessageChannelReadyCallbacks.push(callback)
   }
 
   onJoin(callback: OnJoinCallback) {
