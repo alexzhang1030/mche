@@ -116,7 +116,7 @@ export class MCHelper<B> {
   #addNewConnection(id: string, conn: MCHEConnection) {
     this.#connectionPool.set(id, conn)
     this.#onMessageChannelReadyCallbacks.forEach((callback) => {
-      conn.addDataChannelCallback(callback)
+      conn.addDataChannelReadyCallback(callback)
     })
   }
 
@@ -241,7 +241,7 @@ export class MCHelper<B> {
       log('Broadcasting message', message, 'payload is', payload)
 
     this.#connectionPool.forEach((connection) => {
-      connection.addDataChannelCallback((channel) => {
+      connection.addDataChannelReadyCallback((channel) => {
         channel.send(JSON.stringify(payload.message))
       })
     })
