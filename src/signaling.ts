@@ -90,14 +90,17 @@ export class SignalingServerClient {
   get ws() {
     return {
       ws: this.#ws,
-      registerCallbacks: (callbacks: {
+      registerCallbacks: (callbacks: Partial<{
         onConnected: (ws: WebSocket, event: Event) => void
         onDisconnected: (ws: WebSocket, event: Event) => void
         onError: (ws: WebSocket, event: Event) => void
-      }) => {
-        this.#onConnectedCallbacks.push(callbacks.onConnected)
-        this.#onDisconnectedCallbacks.push(callbacks.onDisconnected)
-        this.#onErrorCallbacks.push(callbacks.onError)
+      }>) => {
+        if (callbacks.onConnected)
+          this.#onConnectedCallbacks.push(callbacks.onConnected)
+        if (callbacks.onDisconnected)
+          this.#onDisconnectedCallbacks.push(callbacks.onDisconnected)
+        if (callbacks.onError)
+          this.#onErrorCallbacks.push(callbacks.onError)
       },
     }
   }
