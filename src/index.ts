@@ -282,4 +282,8 @@ export class MCHelper<B> {
     this.#onJoinCallbacks.length = 0
     this.#onLeaveCallbacks.length = 0
   }
+
+  get signallingServerWS() {
+    return this.#signallingServer.ws
+  }
 }

@@ -70,4 +70,8 @@ export class SignalingServerClient {
   close() {
     this.#ws.close()
   }
+
+  get ws() {
+    return this.#ws
+  }
 }
