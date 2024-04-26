@@ -45,9 +45,22 @@ export class SignalingServerClient {
   #ws
   #roomId
 
+  #onConnectedCallbacks: ((ws: WebSocket, event: Event) => void)[] = []
+  #onDisconnectedCallbacks: ((ws: WebSocket, event: Event) => void)[] = []
+  #onErrorCallbacks: ((ws: WebSocket, event: Event) => void)[] = []
+
   constructor(url: string, roomId: string) {
     this.#ws = createWSHE(url, {
       immediate: true,
+      onConnected: (ws, event) => {
+        this.#onConnectedCallbacks.forEach(callback => callback(ws, event))
+      },
+      onDisconnected: (ws, event) => {
+        this.#onDisconnectedCallbacks.forEach(callback => callback(ws, event))
+      },
+      onError: (ws, event) => {
+        this.#onErrorCallbacks.forEach(callback => callback(ws, event))
+      },
     })
     this.#roomId = roomId
   }
@@ -68,10 +81,24 @@ export class SignalingServerClient {
   }
 
   close() {
+    this.#onConnectedCallbacks.length = 0
+    this.#onDisconnectedCallbacks.length = 0
+    this.#onErrorCallbacks.length = 0
     this.#ws.close()
   }
 
   get ws() {
-    return this.#ws
+    return {
+      ws: this.#ws,
+      registerCallbacks: (callbacks: {
+        onConnected: (ws: WebSocket, event: Event) => void
+        onDisconnected: (ws: WebSocket, event: Event) => void
+        onError: (ws: WebSocket, event: Event) => void
+      }) => {
+        this.#onConnectedCallbacks.push(callbacks.onConnected)
+        this.#onDisconnectedCallbacks.push(callbacks.onDisconnected)
+        this.#onErrorCallbacks.push(callbacks.onError)
+      },
+    }
   }
 }
