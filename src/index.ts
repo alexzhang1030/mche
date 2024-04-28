@@ -3,6 +3,9 @@ import type { NonRoomId, Payload, PayloadAnswer, PayloadCandidate, PayloadOffer 
 import { MCHEConnection } from './connection'
 import { SignalingServerClient, Topic } from './signaling'
 import { error, log } from './utils'
+import type { RTCChannelData } from './types'
+
+export type * from './types'
 
 export interface MCHelperOptions {
   /**
@@ -230,7 +233,20 @@ export class MCHelper<B> {
     return this.#id
   }
 
-  broadcast(message: B) {
+  serializeObjectPayload(payload: B) {
+    return JSON.stringify(payload)
+  }
+
+  deserializeObjectPayload(payload: RTCChannelData) {
+    return JSON.parse(payload as string) as B
+  }
+
+  /**
+   *
+   * @param message RTCChannelData, you can use `serializeObjectPayload` to serialize object to string.
+   * https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel/send#data
+   */
+  broadcast(message: RTCChannelData) {
     const payload = {
       sender: this.#id,
       receiver: 'broadcast',
@@ -242,7 +258,7 @@ export class MCHelper<B> {
 
     this.#connectionPool.forEach((connection) => {
       connection.addDataChannelReadyCallback((channel) => {
-        channel.send(JSON.stringify(payload.message))
+        channel.send(payload.message as /* dts 中类型错误 */any)
       })
     })
   }
@@ -262,8 +278,10 @@ export class MCHelper<B> {
   /**
    * @returns cleanup fn
    */
-  onBroadcast(callback: (message: MessageEvent<B>) => void) {
+  onBroadcast(callback: (message: MessageEvent<RTCChannelData>) => void) {
     const fn = (message: MessageEvent) => {
+      if (this.#options.debug === 'verbose')
+        log('Get broadcasted message', message)
       callback(message)
     }
     this.#dataBufferCallbacks.push(fn)
