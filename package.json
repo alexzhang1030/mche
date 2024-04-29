@@ -1,7 +1,7 @@
 {
   "name": "mche",
   "type": "module",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "packageManager": "pnpm@9.0.6",
   "description": "Message Channel Helpers",
   "author": "alexzhang1030",
