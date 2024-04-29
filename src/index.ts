@@ -291,7 +291,7 @@ export class MCHelper<B> {
   /**
    * @returns cleanup fn
    */
-  onBroadcast(callback: (message: MessageEvent<RTCChannelData>) => void) {
+  onBroadcast<D extends RTCChannelData>(callback: (message: MessageEvent<D>) => void) {
     const fn = (message: MessageEvent) => {
       if (this.#options.debug === 'verbose')
         log('Get broadcasted message', message)
