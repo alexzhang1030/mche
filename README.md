@@ -43,7 +43,23 @@ mch.close()
 
 ### Signaling Server
 
-Note: You need to implement a signaling server by yourself.
+You can use this [signaling server example](https://github.com/alexzhang1030/mche-signaler). Or write your own signaling server.
+
+#### Receive Register
+
+Once a new user joins the room, the signaling server will receive a message like this:
+
+```jsonc
+{
+  "event": "register",
+  "data": {
+    "roomId": "<roomId>",
+    "id": "<id>"
+  }
+}
+```
+
+You need to `broadcast join` to all users in the same room.
 
 #### Broadcast Join
 

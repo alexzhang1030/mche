@@ -74,6 +74,7 @@ export class MCHelper<B> {
     this.#signallingServer = new SignalingServerClient(options.signalingServerUrl, options.roomId)
     this.#bindEvents().catch(error)
     this.#bindSignalingEvents()
+    this.#registerOnSignalingServer()
   }
 
   #bindSignalingEvents() {
@@ -120,6 +121,18 @@ export class MCHelper<B> {
     this.#connectionPool.set(id, conn)
     this.#onMessageChannelReadyCallbacks.forEach((callback) => {
       conn.addDataChannelReadyCallback(callback)
+    })
+  }
+
+  #registerOnSignalingServer() {
+    const ws = this.#signallingServer.ws
+    ws.registerCallbacks({
+      onConnected: () => {
+        ws.ws.send('register', JSON.stringify({
+          roomId: this.#options.roomId,
+          userId: this.#options.id,
+        }))
+      },
     })
   }
 
