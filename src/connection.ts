@@ -1,4 +1,5 @@
 import { log } from './utils'
+import { handleDCError } from './error-handling'
 import type { MCHelperOptions } from '.'
 
 const ICE_SERVERS: RTCIceServer[] = [
@@ -41,7 +42,7 @@ export class MCHEConnection {
         })
       }
       channel.onerror = (event) => {
-        log('DataChannel error.', event)
+        handleDCError(event as RTCErrorEvent, this)
       }
     })
     this.#debug = debug
