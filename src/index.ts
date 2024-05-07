@@ -255,7 +255,7 @@ export class MCHelper<B> {
   }
 
   /**
-   *
+   * If you want to broadcast messages to some peers, you can use `send` function
    * @param message RTCChannelData, you can use `serializeObjectPayload` to serialize object to string.
    * https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel/send#data
    */
@@ -273,6 +273,32 @@ export class MCHelper<B> {
       connection.addDataChannelReadyCallback((channel) => {
         channel.send(payload.message as /* dts 中类型错误 */any)
       })
+    })
+  }
+
+  /**
+   * If you want to broadcast messages to all peers, you can use `broadcast` function
+   * @param targetIds The ID of the peers.
+   * @param message RTCChannelData, you can use `serializeObjectPayload` to serialize object to string.
+   * https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel/send#data
+   */
+  send(targetIds: string[], message: RTCChannelData) {
+    const payload = {
+      sender: this.#id,
+      receiver: targetIds.toString(),
+      message,
+    }
+    const targetIdsSet = new Set(targetIds)
+
+    if (this.#options.debug === 'verbose')
+      log('Sending message', message, 'payload is', payload)
+
+    this.#connectionPool.forEach((connection, id) => {
+      if (targetIdsSet.has(id)) {
+        connection.addDataChannelReadyCallback((channel) => {
+          channel.send(payload.message as /* dts 中类型错误 */any)
+        })
+      }
     })
   }
 
