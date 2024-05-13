@@ -105,56 +105,26 @@ mch.close()
 
 You can use this [signaling server example](https://github.com/alexzhang1030/mche-signaler). Or write your own signaling server.
 
-#### Receive Register
+#### Utilities
 
-Once a new user joins the room, the signaling server will receive a message like this:
+```ts
+import { withHandleMetaEvent } from 'mche/server'
 
-```jsonc
-{
-  "event": "register",
-  "data": {
-    "roomId": "<roomId>",
-    "id": "<id>"
-  }
-}
+const {
+  getHeartbeatResponse,
+  isHeartbeatRequestParsed,
+  getMetaCloseResponse,
+  getMetaRegisterAcceptResponse,
+  getMetaRegisterResponse,
+  getMetaRegisterEventPayload,
+  isMetaRegisterEvent,
+  tryParseMetaEvent,
+} = withHandleMetaEvent()
 ```
 
-You need to `broadcast join` to all users in the same room.
+You can use these functions to implement your own signaling server.
 
-#### Broadcast Join
-
-You need broadcast the room users to new user when they join the room. The data structure should be like this:
-
-```jsonc
-{
-  "event": "open",
-  // The peer users ids
-  "data": {
-    "roomId": "<roomId>",
-    "data": [
-      { "id": "<id1>", "userData": { } },
-      { "id": "<id2>", "userData": { } }
-    ]
-  }
-}
-```
-
-We actually connect other peers by using `WebRTC` after we get the `open` event. So `ids` should be required for connecting.
-
-#### Broadcast Leave
-
-You need broadcast the room users when someone leave the room. The data structure should be like this:
-
-```jsonc
-{
-  "event": "close",
-  // The leaved user id
-  "data": {
-    "roomId": "<roomId>",
-    "data": { "id": "<id>" }
-  }
-}
-```
+But recommended to checkout the [signaling server example](https://github.com/alexzhang1030/mche-signaler)
 
 ## License
 
