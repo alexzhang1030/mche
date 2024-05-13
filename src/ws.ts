@@ -1,47 +1,9 @@
 import { createWSHE } from 'wshe'
-
-export interface RoomId {
-  roomId: string
-}
-
-export interface PayloadCommon extends RoomId {
-  sender: string
-  receiver: string
-}
-
-export interface PayloadOffer extends PayloadCommon {
-  offer: RTCSessionDescriptionInit
-}
-
-export interface PayloadAnswer extends PayloadCommon {
-  answer: RTCSessionDescriptionInit
-}
-
-export interface PayloadCandidate extends PayloadCommon {
-  candidate: RTCIceCandidate
-}
-
-export enum Topic {
-  OfferSend = 'mche:offer:send',
-  AnswerSend = 'mche:answer:send',
-  CandidateSend = 'mche:candidate:send',
-}
-
-export interface Payload {
-  [Topic.OfferSend]: PayloadOffer
-  [Topic.AnswerSend]: PayloadAnswer
-  [Topic.CandidateSend]: PayloadCandidate
-  open: {
-    data: { id: string, userData?: Record<string, unknown> }[]
-  } & RoomId
-  close: {
-    data: { id: string }
-  } & RoomId
-}
+import type { DataTypes } from './types'
 
 export type NonRoomId<T> = Omit<T, 'roomId'>
 
-export class SignalingServerClient {
+export class WsClient<P extends Record<string, any> = Record<string, never>> {
   #ws
   #roomId
 
@@ -49,8 +11,8 @@ export class SignalingServerClient {
   #onDisconnectedCallbacks: ((ws: WebSocket, event: Event) => void)[] = []
   #onErrorCallbacks: ((ws: WebSocket, event: Event) => void)[] = []
 
-  constructor(url: string, roomId: string) {
-    this.#ws = createWSHE(url, {
+  constructor(urlOrWsInstance: string | WebSocket, roomId: string) {
+    this.#ws = createWSHE(urlOrWsInstance, {
       immediate: true,
       onConnected: (ws, event) => {
         this.#onConnectedCallbacks.forEach(callback => callback(ws, event))
@@ -65,15 +27,23 @@ export class SignalingServerClient {
     this.#roomId = roomId
   }
 
-  send<K extends keyof Payload = keyof Payload>(topic: K, data: NonRoomId<Payload[K]>) {
-    this.#ws.send(topic, {
+  send<K extends keyof P = keyof P>(topic: K, data: NonRoomId<P[K]>) {
+    this.#ws.send(topic as string, {
       ...data,
       roomId: this.#roomId,
     })
   }
 
-  on<K extends keyof Payload = keyof Payload>(topic: K, callback: (data: Payload[K]) => void) {
-    this.#ws.subscribe(topic, (data: Payload[K]) => {
+  sendRaw(data: DataTypes) {
+    this.#ws.sendRaw(data)
+  }
+
+  onRaw<D extends DataTypes>(callback: (data: D) => void) {
+    return this.#ws.subscribeRaw<D>(callback)
+  }
+
+  on<K extends keyof P = keyof P>(topic: K, callback: (data: P[K]) => void) {
+    this.#ws.subscribe(topic as string, (data: P[K]) => {
       if (data.roomId !== this.#roomId)
         return
       callback(data)

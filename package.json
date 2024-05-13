@@ -37,8 +37,7 @@
     "release": "vitest run && bumpp --commit \"chore: release v%s\" --push --tag && pnpm publish"
   },
   "dependencies": {
-    "nanoid": "^5.0.7",
-    "wshe": "^2.1.1"
+    "wshe": "^2.1.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.17.0",
