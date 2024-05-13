@@ -17,10 +17,10 @@ export function log(...args: any[]) {
 export function registerOnWsConnected(ws: InstanceType<typeof WsClient>['ws'], id: string, roomId: string) {
   ws.registerCallbacks({
     onConnected: () => {
-      ws.ws.send('register', JSON.stringify({
+      ws.ws.send('register', {
         roomId,
         userId: id,
-      }))
+      })
     },
   })
 }
