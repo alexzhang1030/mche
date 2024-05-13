@@ -10,7 +10,7 @@ This is a library that provides some utilities that helps you to communicate dat
 
 It's simple if you want to build a collaboration application by using `mche`.
 
-We provide first-class support to `WebRTC`.
+We provide first-class support to `WebRTC` and `WebSocket`.
 
 > ⚠️ WARNING: this project is not stable yet, please use it carefully. Expect breaking changes.
 
@@ -18,6 +18,66 @@ We provide first-class support to `WebRTC`.
 
 ```bash
 pnpm i mche
+```
+
+## Options
+
+You can choose `WebRTC` or `WebSocket` to communicate with other peers.
+
+```ts
+interface MCHelperOptionsBase {
+  /**
+   * The ID of the peer.
+   */
+  id: string
+
+  /**
+   * Whether to print debug information.
+   * - `'verbose'`: print all debug information
+   * - `true`: print connection information
+   *
+   * @default false
+   */
+  debug?: boolean | 'verbose'
+
+  /**
+   * Room id.
+   *
+   * Same room id will be able to communicate with each other.
+   */
+  roomId: string
+}
+
+interface MCHelperOptionsWebRTC extends MCHelperOptionsBase {
+  mode: 'webrtc'
+
+  /**
+   * The URL of the signaling server or ws instance.
+   * @example "wss://example.com:8080"
+   */
+  signalingServerUrlOrWsInstance: string | WebSocket
+
+  /**
+   * ICE servers.
+   * @default
+   * [
+   *  { urls: 'stun:stun.l.google.com:19302', }
+   * ]
+   */
+  iceServers?: RTCIceServer[]
+}
+
+interface MCHelperOptionsWebSocket extends MCHelperOptionsBase {
+  mode: 'websocket'
+
+  /**
+   * The URL or ws instance.
+   * @example "wss://example.com:8080"
+   */
+  urlOrWsInstance: string | WebSocket
+}
+
+type MCHelperOptions = MCHelperOptionsWebRTC | MCHelperOptionsWebSocket
 ```
 
 ## Usage
