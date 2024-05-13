@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "nanoid": "^5.0.7",
-    "wshe": "^1.0.2"
+    "wshe": "^2.1.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.16.1",
