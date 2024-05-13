@@ -54,7 +54,15 @@ export class WebSocketContainer extends AbstractContainer {
       receiver: 'broadcast',
       message,
     }
-    this.#ws.sendRaw(message)
+
+    if (this.#ws.ws.ws.ws?.readyState === WebSocket.OPEN) {
+      this.#ws.sendRaw(message)
+    }
+    else {
+      this.onMessageChannelReady(() => {
+        this.#ws.sendRaw(message)
+      })
+    }
 
     return payload
   }
