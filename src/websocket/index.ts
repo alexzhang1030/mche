@@ -38,9 +38,9 @@ export class WebSocketContainer extends AbstractContainer {
     this.#ws.on('register_accept', ({ id, roomId }) => {
       if (roomId !== options.roomId || id !== this.#id)
         return
+      this.#connected = true
       this.#onDataChannelReadyCallbacks.forEach(callback => callback())
       this.#onDataChannelReadyCallbacks.length = 0
-      this.#connected = true
     })
   }
 
