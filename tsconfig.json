@@ -4,7 +4,7 @@
     "lib": ["ESNext", "DOM"],
     "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "paths": {
       "@/*": ["src/*"]
     },

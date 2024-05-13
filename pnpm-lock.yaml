@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       wshe:
-        specifier: ^2.1.3
-        version: 2.1.3
+        specifier: ^2.1.5
+        version: 2.1.5
     devDependencies:
       '@antfu/eslint-config':
         specifier: ^2.17.0
@@ -2136,8 +2136,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  wshe@2.1.3:
-    resolution: {integrity: sha512-kHnhsxqPcgSH+h4CNnfKGlbk+t3CZhTG9l+XzLlBtB2nGO5923ioidQnVD0JBTWtk5e6UL4PvTqjiNGPdmQieA==}
+  wshe@2.1.5:
+    resolution: {integrity: sha512-pN8PWFTU+8tH7FMNDKYv1eM/XTknQSEfRtfOxDcyweKCBL6EwIkJzsLQyHNPWiSjhlSwmzaGCIxbd0DQ7ZI7Bw==}
 
   xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}
@@ -4369,7 +4369,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  wshe@2.1.3:
+  wshe@2.1.5:
     dependencies:
       destr: 2.0.3
       mitt: 3.0.1

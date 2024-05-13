@@ -20,6 +20,10 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./server": {
+      "import": "./dist/server.js",
+      "require": "./dist/server.cjs"
     }
   },
   "main": "./dist/index.cjs",
@@ -37,7 +41,7 @@
     "release": "vitest run && bumpp --commit \"chore: release v%s\" --push --tag && pnpm publish"
   },
   "dependencies": {
-    "wshe": "^2.1.3"
+    "wshe": "^2.1.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.17.0",
