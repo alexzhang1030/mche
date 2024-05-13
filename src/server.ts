@@ -31,6 +31,12 @@ export function withHandleMetaEvent() {
     isMetaRegisterEvent(event: any) {
       return event.event === MetaEventType.Register
     },
+    getMetaRegisterEventPayload(event: any) {
+      return event.data as {
+        roomId: string
+        userId: string
+      }
+    },
     getMetaRegisterResponse(roomId: string, userId: string) {
       return buildMetaPayload<MetaEventTypePayload>(MetaEventType.Open, {
         roomId,
