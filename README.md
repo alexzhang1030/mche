@@ -86,9 +86,11 @@ type MCHelperOptions = MCHelperOptionsWebRTC | MCHelperOptionsWebSocket
 import { MCHelper } from 'mche'
 
 const mch = new MCHelper({
-  signalingServer: 'ws://localhost:8080',
-  id: '<uniqueSelfId>',
-  roomId: '<uniqueRoomId>',
+  // ...options
+})
+
+mche.onMessageChannelReady(() => {
+  // MessageChannel is ready...
 })
 
 mch.broadcast('hello')
@@ -97,7 +99,7 @@ mch.onBroadcast((data) => {
   console.log(data)
 })
 
-// Call close if someone is leaving the room
+// Call close if you want to close the connection.
 mch.close()
 ```
 
