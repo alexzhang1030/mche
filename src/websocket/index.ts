@@ -1,10 +1,11 @@
-import type { DataTypes, MCHelperOptionsWebSocket, OnJoinCallback, OnLeaveCallback, PayloadBase } from '@/types'
+import type { PayloadWebSocket } from './types'
+import type { DataTypes, MCHelperOptionsWebSocket, OnJoinCallback, OnLeaveCallback } from '@/types'
 import { AbstractContainer } from '@/base'
 import { WsClient } from '@/ws'
 import { registerOnWsConnected } from '@/utils'
 
 export class WebSocketContainer extends AbstractContainer {
-  #ws: WsClient<PayloadBase>
+  #ws: WsClient<PayloadWebSocket>
 
   #onDataChannelReadyCallbacks: (() => void)[] = []
   #onJoinCallbacks: OnJoinCallback[] = []
@@ -12,19 +13,13 @@ export class WebSocketContainer extends AbstractContainer {
 
   #id
 
+  #connected = false
+
   constructor(options: MCHelperOptionsWebSocket) {
     super()
 
     this.#id = options.id
     this.#ws = new WsClient(options.urlOrWsInstance, options.roomId)
-
-    const { registerCallbacks } = this.#ws.ws
-    registerCallbacks({
-      onConnected: () => {
-        this.#onDataChannelReadyCallbacks.forEach(callback => callback())
-        this.#onDataChannelReadyCallbacks.length = 0
-      },
-    })
 
     registerOnWsConnected(this.#ws.ws, options.id, options.roomId)
 
@@ -39,10 +34,18 @@ export class WebSocketContainer extends AbstractContainer {
         return
       this.#onLeaveCallbacks.forEach(callback => callback(data))
     })
+
+    this.#ws.on('register_accept', ({ id, roomId }) => {
+      if (roomId !== options.roomId || id !== this.#id)
+        return
+      this.#onDataChannelReadyCallbacks.forEach(callback => callback())
+      this.#onDataChannelReadyCallbacks.length = 0
+      this.#connected = true
+    })
   }
 
   onMessageChannelReady(callback: () => void): void {
-    if (this.#ws.ws.ws.ws?.readyState === WebSocket.OPEN)
+    if (this.#connected)
       callback()
     else
       this.#onDataChannelReadyCallbacks.push(callback)
@@ -55,7 +58,7 @@ export class WebSocketContainer extends AbstractContainer {
       message,
     }
 
-    if (this.#ws.ws.ws.ws?.readyState === WebSocket.OPEN) {
+    if (this.#connected) {
       this.#ws.sendRaw(message)
     }
     else {
@@ -104,5 +107,6 @@ export class WebSocketContainer extends AbstractContainer {
 
   close() {
     this.#ws.close()
+    this.#connected = false
   }
 }
