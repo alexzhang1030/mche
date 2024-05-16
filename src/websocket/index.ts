@@ -109,4 +109,8 @@ export class WebSocketContainer extends AbstractContainer {
     this.#ws.close()
     this.#connected = false
   }
+
+  get ws() {
+    return this.#ws.ws
+  }
 }

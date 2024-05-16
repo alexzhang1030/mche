@@ -1,6 +1,9 @@
 import type { DataTypes, OnJoinCallback, OnLeaveCallback } from './types'
+import type { WsClient } from './ws'
 
 export abstract class AbstractContainer {
+  abstract ws: InstanceType<typeof WsClient>['ws']
+
   /**
    * If you want to broadcast messages to some peers, you can use `send` function
    * @param message DataTypes, include binary | string, you can use `serializeObjectPayload` to serialize object to string.

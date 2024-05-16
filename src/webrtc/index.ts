@@ -40,6 +40,10 @@ export class WebRtcContainer extends AbstractContainer {
     registerOnWsConnected(this.#signalingServer.ws, this.#id, this.#options.roomId)
   }
 
+  get ws() {
+    return this.#signalingServer.ws
+  }
+
   #addMessageToBuffer(message: MessageEvent) {
     this.#dataBuffer.push(message)
     this.#dataBufferCallbacks.forEach((callback) => {

@@ -20,6 +20,12 @@ export class MCHelper<B> implements AbstractContainer {
       this.#container = new WebRtcContainer(options)
     else
       this.#container = new WebSocketContainer(options)
+
+    this.#container.ws.registerCallbacks({
+      onDisconnected: () => {
+        this.#container.close()
+      },
+    })
   }
 
   get id() {
@@ -68,5 +74,9 @@ export class MCHelper<B> implements AbstractContainer {
 
   close() {
     this.#container.close()
+  }
+
+  get ws() {
+    return this.#container.ws
   }
 }

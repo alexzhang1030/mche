@@ -14,6 +14,7 @@ export class WsClient<P extends Record<string, any> = Record<string, never>> {
   constructor(urlOrWsInstance: string | WebSocket, roomId: string) {
     this.#ws = createWSHE(urlOrWsInstance, {
       immediate: true,
+      autoReconnect: true,
       onConnected: (ws, event) => {
         this.#onConnectedCallbacks.forEach(callback => callback(ws, event))
       },
