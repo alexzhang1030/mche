@@ -41,7 +41,7 @@
     "release": "vitest run && bumpp --commit \"chore: release v%s\" --push --tag && pnpm publish"
   },
   "dependencies": {
-    "wshe": "^2.2.1"
+    "wshe": "^2.2.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^2.21.1",
