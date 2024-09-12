@@ -1,11 +1,11 @@
-import type { Payload, PayloadAnswer, PayloadCandidate, PayloadOffer } from './types'
-import { Topic } from './types'
-import { WebRtcConnection } from './connection'
-import type { DataTypes, MCHelperOptionsWebRTC, OnJoinCallback, OnLeaveCallback } from '@/types'
-import { error, log, registerOnWsConnected } from '@/utils'
-import type { NonRoomId } from '@/ws'
-import { WsClient } from '@/ws'
 import { AbstractContainer } from '@/base'
+import { error, log, registerOnWsConnected } from '@/utils'
+import { WsClient } from '@/ws'
+import type { DataTypes, MCHelperOptionsWebRTC, OnJoinCallback, OnLeaveCallback } from '@/types'
+import type { NonRoomId } from '@/ws'
+import { WebRtcConnection } from './connection'
+import { Topic } from './types'
+import type { Payload, PayloadAnswer, PayloadCandidate, PayloadOffer } from './types'
 
 export class WebRtcContainer extends AbstractContainer {
   #id

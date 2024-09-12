@@ -1,7 +1,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel/error_event
 
-import type { WebRtcConnection } from './connection'
 import { error } from '@/utils'
+import type { WebRtcConnection } from './connection'
 
 const sctpCauseCodes = [
   'No SCTP error',

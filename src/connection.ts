@@ -1,5 +1,5 @@
-import { log } from './utils'
 import { handleDCError } from './error-handling'
+import { log } from './utils'
 import type { MCHelperOptions } from '.'
 
 const ICE_SERVERS: RTCIceServer[] = [
