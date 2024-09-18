@@ -1,8 +1,8 @@
+import type { DataTypes, MCHelperOptionsWebSocket, OnJoinCallback, OnLeaveCallback } from '@/types'
+import type { PayloadWebSocket } from './types'
 import { AbstractContainer } from '@/base'
 import { registerOnWsConnected } from '@/utils'
 import { WsClient } from '@/ws'
-import type { DataTypes, MCHelperOptionsWebSocket, OnJoinCallback, OnLeaveCallback } from '@/types'
-import type { PayloadWebSocket } from './types'
 
 export class WebSocketContainer extends AbstractContainer {
   #ws: WsClient<PayloadWebSocket>

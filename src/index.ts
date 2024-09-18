@@ -1,8 +1,8 @@
+import type { AbstractContainer } from './base'
+import type { DataTypes, MCHelperOptions, OnJoinCallback, OnLeaveCallback } from './types'
 import { log } from './utils'
 import { WebRtcContainer } from './webrtc'
 import { WebSocketContainer } from './websocket'
-import type { AbstractContainer } from './base'
-import type { DataTypes, MCHelperOptions, OnJoinCallback, OnLeaveCallback } from './types'
 
 export type * from './types'
 

@@ -1,5 +1,5 @@
-import { createWSHE } from 'wshe'
 import type { DataTypes } from './types'
+import { createWSHE } from 'wshe'
 
 export type NonRoomId<T> = Omit<T, 'roomId'>
 
