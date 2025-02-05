@@ -1,6 +1,6 @@
+import { handleDCError } from './error-handling'
 import type { MCHelperOptionsWebRTC } from '@/types'
 import { log } from '@/utils'
-import { handleDCError } from './error-handling'
 
 const ICE_SERVERS: RTCIceServer[] = [
   {
