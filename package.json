@@ -44,7 +44,7 @@
     "wshe": "^2.2.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.13.0",
+    "@antfu/eslint-config": "^5.4.1",
     "bumpp": "^10.1.0",
     "eslint": "^9.26.0",
     "lint-staged": "^16.0.0",
