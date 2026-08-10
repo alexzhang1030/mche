@@ -2,7 +2,7 @@
   "name": "mche",
   "type": "module",
   "version": "0.9.2",
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@11.21.0",
   "description": "Message Channel Helpers",
   "author": "alexzhang1030",
   "license": "MIT",
@@ -44,9 +44,9 @@
     "wshe": "^2.2.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.13.1",
+    "@antfu/eslint-config": "^9.3.0",
     "bumpp": "^12.0.0",
-    "eslint": "^9.27.0",
+    "eslint": "^10.8.1",
     "lint-staged": "^17.0.4",
     "simple-git-hooks": "^2.13.0",
     "tsup": "^8.5.0",
