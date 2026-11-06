@@ -46,7 +46,9 @@ export function withHandleMetaEvent() {
     getMetaRegisterResponse(roomId: string, userId: string) {
       return buildMetaPayload<MetaEventTypePayload>(MetaEventType.Open, {
         roomId,
-        data: [{ id: userId }],
+        data: [
+          { id: userId },
+        ],
       })
     },
     getMetaRegisterAcceptResponse(roomId: string, userId: string) {
